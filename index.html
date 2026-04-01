@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seu material está pronto!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #2d6a4f;
+      --green-light: #52b788;
+      --gold: #c9a84c;
+      --dark: #1a1a1a;
+      --cream: #f5f0e8;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(45,106,79,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 90%, rgba(201,168,76,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 56px 48px 48px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
+      animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .check-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      animation: popIn 0.5s 0.3s cubic-bezier(.34,1.56,.64,1) both;
+      box-shadow: 0 4px 24px rgba(45,106,79,0.25);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .check-circle svg {
+      width: 36px; height: 36px;
+      stroke: #fff; stroke-width: 3;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .check-circle svg path {
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: drawCheck 0.4s 0.7s ease forwards;
+    }
+
+    @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .downloads {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .pdf-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 14px 18px;
+      border: 1.5px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .pdf-item.downloading { border-color: var(--green-light); background: #f0faf4; }
+    .pdf-item.done { border-color: var(--green); background: #e8f5ee; }
+
+    .pdf-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--green);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .pdf-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+
+    .pdf-info { flex: 1; text-align: left; }
+    .pdf-name { font-weight: 600; color: var(--dark); font-size: 0.9rem; }
+    .pdf-status { font-size: 0.78rem; color: #999; margin-top: 2px; }
+    .pdf-item.downloading .pdf-status { color: var(--green); }
+    .pdf-item.done .pdf-status { color: var(--green); font-weight: 500; }
+
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2.5px solid #ddd;
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .tick { display: none; color: var(--green); font-size: 1.1rem; font-weight: bold; }
+    .pdf-item.downloading .spinner { display: block; }
+    .pdf-item.done .tick { display: flex; align-items: center; justify-content: center; }
+    .pdf-item.done .spinner { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .manual-links {
+      margin-top: 4px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .manual-links p { font-size: 0.82rem; color: #aaa; margin-bottom: 10px; }
+
+    .manual-links a {
+      display: inline-block;
+      margin: 4px 6px;
+      font-size: 0.82rem;
+      color: var(--green);
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1.5px solid var(--green-light);
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .manual-links a:hover { background: #e8f5ee; }
+
+    .gold-bar {
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), #e8c97a, var(--gold));
+      border-radius: 0 0 24px 24px;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="check-circle">
+    <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+  </div>
+
+  <h1>Seu material está pronto!</h1>
+  <p class="subtitle">Os downloads começarão automaticamente em instantes. Confira abaixo o status de cada arquivo.</p>
+
+  <div class="downloads">
+    <div class="pdf-item" id="pdf1">
+      <div class="pdf-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="pdf-info">
+        <div class="pdf-name">Como Transformar uma Renda Extra</div>
+        <div class="pdf-status" id="status1">Aguardando...</div>
+      </div>
+      <div style="flex-shrink:0">
+        <div class="spinner" id="spin1"></div>
+        <div class="tick" id="tick1">✓</div>
+      </div>
+    </div>
+
+    <div class="pdf-item" id="pdf2">
+      <div class="pdf-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="pdf-info">
+        <div class="pdf-name">20 Ideias de Renda Extra</div>
+        <div class="pdf-status" id="status2">Aguardando...</div>
+      </div>
+      <div style="flex-shrink:0">
+        <div class="spinner" id="spin2"></div>
+        <div class="tick" id="tick2">✓</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="manual-links">
+    <p>Se o download não iniciou automaticamente, clique abaixo:</p>
+    <a href="ebook_vmt_rendaextra_2.pdf" download>⬇ Baixar eBook 1</a>
+    <a href="ebook_vmt_rendaextra.pdf" download>⬇ Baixar eBook 2</a>
+  </div>
+
+  <div class="gold-bar"></div>
+</div>
+
+<script>
+  var pdfs = [
+    { file: "ebook_vmt_rendaextra_2.pdf", itemId: "pdf1", statusId: "status1", spinId: "spin1", tickId: "tick1", delay: 800 },
+    { file: "ebook_vmt_rendaextra.pdf",   itemId: "pdf2", statusId: "status2", spinId: "spin2", tickId: "tick2", delay: 2400 }
+  ];
+
+  pdfs.forEach(function(pdf) {
+    setTimeout(function() {
+      var item = document.getElementById(pdf.itemId);
+      var status = document.getElementById(pdf.statusId);
+      item.classList.add('downloading');
+      status.textContent = 'Baixando...';
+
+      var a = document.createElement('a');
+      a.href = pdf.file;
+      a.download = pdf.file;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(function() {
+        item.classList.remove('downloading');
+        item.classList.add('done');
+        status.textContent = 'Download concluído ✓';
+      }, 2000);
+    }, pdf.delay);
+  });
+</script>
+</body>
+</html>
