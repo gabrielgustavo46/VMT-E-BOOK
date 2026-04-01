@@ -234,6 +234,7 @@
 </div>
 
 <script>
+function iniciarDownloads() {
   var pdfs = [
     { file: "ebook_vmt_rendaextra_2.pdf", itemId: "pdf1", statusId: "status1", spinId: "spin1", tickId: "tick1", delay: 800 },
     { file: "ebook_vmt_rendaextra.pdf",   itemId: "pdf2", statusId: "status2", spinId: "spin2", tickId: "tick2", delay: 2400 }
@@ -243,6 +244,7 @@
     setTimeout(function() {
       var item = document.getElementById(pdf.itemId);
       var status = document.getElementById(pdf.statusId);
+
       item.classList.add('downloading');
       status.textContent = 'Baixando...';
 
@@ -258,8 +260,13 @@
         item.classList.add('done');
         status.textContent = 'Download concluído ✓';
       }, 2000);
+
     }, pdf.delay);
   });
+}
+
+// 👇 dispara após PRIMEIRO clique do usuário
+document.addEventListener("click", iniciarDownloads, { once: true });
 </script>
 </body>
 </html>
